@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "/API/Book/GetOrderedBooks/",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (msg) {
+                $.each(msg, function(i, val) {
+                    $(".orderedBooks").append("<li value='" + val.BookId + "'>" + val.BookTitle + "</li>");
+                });
+                var $book = msg;
+                var $option = new Option($book.BookTitle, $book.BookId);
+                $("#lstBookTitles").append($option);
+            },
+            error: function () {
+                alert('Error calling GetOrderedBooks');
+            }
+        });
+
+    });
+
+</script>
+<h2>Checkout</h2>
+
+<h1>Ordered books</h1>
+<ul class="orderedBooks"></ul>

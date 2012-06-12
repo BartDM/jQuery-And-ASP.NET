@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "All books";
+}
+<script type="text/javascript" src="../../Scripts/jQuery.tmpl.min.js"></script>
+<script id="bookTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Id}</td>
+        <td>${Title}</td>
+        <td class="ui-widget">${Author}</td>
+        <td>${ISBN}</td>
+        <td>${Pages}</td>
+        <td>${PrintDate}</td>
+        <td>${UserName}</td>
+        <td>${Added}</td>
+    </tr>
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listBooks(function (books) {
+            $.each(books, function (index, book) {
+                book.PrintDate = FormatDate(book.PrintDate);
+                book.Added = FormatDate(book.Added);
+            });
+            $("#bookTemplate").tmpl(books).appendTo("table tbody");
+        });
+    });
+
+    function listBooks(callback) {
+        $.ajax({
+            url: "/api/book/ListBooks",
+            data: { },
+            type: "GET",
+            contentType: "application/json;charset=utf-8"
+        }).then(function(books) {
+            callback(books);
+        });
+    }
+    
+    function FormatDate(oldDateString) {
+        var date = new Date(eval(oldDateString.slice(1, -1)));
+        var formattedDate = $.datepicker.formatDate('dd/mm/yy', date);
+        return formattedDate;
+    }
+    
+
+</script>
+<div class="content-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Pages</th>
+                <th>PrintDate</th>
+                <th>UserName</th>
+                <th>Added</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

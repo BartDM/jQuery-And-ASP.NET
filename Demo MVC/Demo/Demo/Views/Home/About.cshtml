@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "About Us";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "/API/Book/GetOrderedBooks/",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (msg) {
+                $.each(msg, function(i, val) {
+                    $(".orderedBooks").append("<li value='" + val.BookId + "'>" + val.BookTitle + "</li>");
+                });
+
+                var $book = msg;
+                var $option = new Option($book.BookTitle, $book.BookId);
+                $("#lstBookTitles").append($option);
+            },
+            error: function () {
+                alert('Error calling GetOrderedBooks');
+            }
+        });
+
+    });
+
+</script>
+<h2>Books</h2>
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet felis sit amet lectus accumsan elementum. Aliquam at nulla non diam porttitor volutpat at in ante. Integer metus eros, ullamcorper et tincidunt at, adipiscing vel metus. Donec at justo quis nisi consectetur condimentum quis eget nunc. Nullam bibendum lectus sed justo ultrices commodo. Duis auctor cursus metus, id aliquam nunc elementum in. Aenean eget massa tellus, at sodales dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent mollis sem lacus. In hac habitasse platea dictumst. Nunc euismod mauris sed tellus tempus blandit. Quisque ultricies lectus eget magna tempor tempus. Aenean vel urna diam. Cras imperdiet est nec arcu pretium fermentum malesuada risus varius. Aenean ut purus sed justo pharetra varius in vitae odio.
+
+Sed sed odio iaculis mi bibendum suscipit rutrum vitae tellus. Nullam sapien augue, cursus sed pharetra eu, pharetra nec mauris. Aenean posuere, metus ac suscipit dignissim, enim magna interdum erat, eu sagittis metus libero in elit. Quisque placerat, purus in commodo porta, metus tortor aliquet magna, id scelerisque augue magna eleifend orci. Sed enim lacus, volutpat ac dictum nec, lacinia ut nisl. Curabitur venenatis cursus tincidunt. Fusce bibendum diam eget mi condimentum accumsan. Morbi ante odio, aliquet consequat malesuada et, ultrices ut magna. Proin pellentesque egestas elit, id vehicula orci pretium id.
+
+Maecenas id massa quis ante consectetur sodales quis et elit. Fusce justo eros, tempus vel placerat sed, tempus et tellus. In iaculis mattis leo, sed tempor libero rhoncus nec. Praesent leo sem, eleifend eu consequat nec, vehicula ut felis. Cras euismod dictum nisl sagittis tincidunt. Aenean consequat, ligula nec scelerisque bibendum, mi justo dignissim lectus, at rhoncus sapien lacus sit amet est. Pellentesque quam purus, dignissim ac congue porta, mattis quis diam. Nam quis ipsum dui. Nullam eu risus felis. In sed nisl quis orci accumsan mattis nec eget nunc. Sed molestie, sapien eget congue ultrices, massa leo fermentum magna, non tincidunt nisi velit non magna. Nam ac placerat odio. Curabitur vestibulum, sem nec sagittis malesuada, nunc metus congue quam, at venenatis nisl elit id metus. Nam pellentesque, massa vitae pretium congue, purus nisi scelerisque erat, quis vehicula velit libero vel velit. Phasellus varius justo vel nisl semper congue a eu ligula. 
+</p>
+
+<h1>Ordered books</h1>    
+    <ul class="orderedBooks">
+        
+    </ul>

@@ -1,0 +1,11 @@
+<Configuration>
+  <SnapshotDialog>
+    <InitialDirectory>C:\projects\JQuery Advanced\Demo3\Demo</InitialDirectory>
+  </SnapshotDialog>
+  <CoverageFilters>
+    <IncludeFilters>
+      <Filter ModuleMask="*" ClassMask="*" FunctionMask="*" />
+    </IncludeFilters>
+    <ExcludeFilters />
+  </CoverageFilters>
+</Configuration>

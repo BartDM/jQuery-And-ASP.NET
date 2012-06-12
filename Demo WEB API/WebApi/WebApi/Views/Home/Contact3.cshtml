@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "All books";
+}
+<script type="text/javascript" src="../../Scripts/jQuery.tmpl.min.js"></script>
+<script id="bookTemplateSmall" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Title}</td>
+        <td>${Author}</td>
+    </tr>
+</script>
+<script id="bookTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Title}</td>
+        <td>${Author}</td>
+        <td>${ISBN}</td>
+        <td>${Pages}</td>
+        <td>${PrintDate}</td>
+        <td>${UserName}</td>
+        <td>${Added}</td>
+        <td>${Id}</td>
+    </tr>
+</script>
+<script type="text/javascript">
+    var data;
+    var smallView = true;
+    $(document).ready(function () {
+        listBooks(function (books) {
+            $.each(books, function (index, book) {
+                book.PrintDate = FormatDate(book.PrintDate);
+                book.Added = FormatDate(book.Added);
+            });
+            data = books;
+            renderTemplate($("table tbody"), $("#bookTemplateSmall"), data);
+        });
+        $("#btnToggleView").click(function () { ToggleView(); });
+    });
+
+    function listBooks(callback) {
+        $.ajax({
+            url: "/api/book/ListBooks",
+            data: {},
+            type: "GET",
+            contentType: "application/json;charset=utf-8"
+        }).then(function (books) {
+            callback(books);
+        });
+    }
+
+    function FormatDate(oldDateString) {
+        var date = new Date(eval(oldDateString.slice(1, -1)));
+        var formattedDate = $.datepicker.formatDate('dd/mm/yy', date);
+        return formattedDate;
+    }
+
+    function ToggleView() {
+        if (smallView) {
+            $("table thead tr").append("<th>ISBN</th><th>Pages</th><th>PrintDate</th><th>UserName</th><th>Added</th><th>Id</th>");
+            renderTemplate($("table tbody"), $("#bookTemplate"), data);
+            smallView = false;
+        } else {
+            $("table thead tr th:gt(1)").remove();
+            renderTemplate($("table tbody"), $("#bookTemplateSmall"), data);
+            smallView = true;
+        }
+    }
+
+    function renderTemplate(container, template, data) {
+        $(container).empty();
+        $.tmpl(template, data).appendTo(container);background: url("/img/banner.jpg") no-repeat scroll 0 0 #F6F6F6;
+    }
+</script>
+<div class="content-wrapper">
+    <table cellpadding="5">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+    <div>
+        <input type="button" value="Toggle view" id="btnToggleView" />
+    </div>
+</div>

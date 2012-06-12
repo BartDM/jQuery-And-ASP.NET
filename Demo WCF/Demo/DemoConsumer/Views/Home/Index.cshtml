@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Click handler for get person
+        $("#btnGetPerson").click(function () {
+            $("#spanPerson").html("");
+            var id = $("#txtPersonId").val();
+            $.ajax({
+                url: "http://wcf.bartdemeyer.be/Person" + "(" + id + ")",
+                type: "GET",
+                dataType: "json",
+                success: function (person) {
+                    if (person !== null) {
+                        $("#spanPerson").html(person.LastName + " - " + person.FirstName);
+                    }else {
+                        $("#spanPerson").html("Persoon met ID "+id+" bestaat niet");
+                    }
+                },
+                error: function (message) {
+                    alert(message);
+                }
+            });
+        });
+        
+
+//Click handler for add person
+        $("#btnAddPerson").click(function() {
+            var firstName = $("#txtFirstName").val();
+            var lastName = $("#txtLastName").val();
+            var jData = {};
+            jData.FirstName = firstName;
+            jData.LastName = lastName;
+            $.ajax({
+                url: "http://wcf.bartdemeyer.be/Person",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(jData),
+                success: function (person) {
+                    if (person !== null) {
+                        alert("Person Added, ID=" + person.Id);
+                    } else {
+                        alert("Error adding person");
+                    }
+                },
+                error: function (message) {
+                    alert(message);
+                }
+            });
+        });
+    })
+</script>
+<h2>Get Person</h2>
+<p>
+    <input type="text" id="txtPersonId" />
+    <span id="spanPerson"></span>
+    <input type="button" id="btnGetPerson" value="Get"/>
+</p>
+<h2>Add Person</h2>
+<p>
+    <input type="text" id="txtFirstName" />
+    <input type="text" id="txtLastName" />
+    <input type="button" id="btnAddPerson" value="Create" />
+</p>

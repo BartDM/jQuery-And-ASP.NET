@@ -1,0 +1,97 @@
+@{
+    ViewBag.Title = "Home Page";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnGetPerson").click(function () {
+            var id = $("#txtPersonId").val();
+            GetPerson(id, function (person) {
+                $("#txtPerson").html(person.FirstName + "-" + person.LastName);
+            });
+        });
+        $("#btnCreatePerson").click(function () {
+            var person = {
+                LastName: $("#txtLastName").val(),
+                FirstName: $("#txtFirstName").val()
+            };
+            createPerson(person, function (personCreated) {
+                $("#txtPersonCreateId").html("Person created with id " + personCreated.Id);
+            });
+        });
+
+        $("#btnAllPerson").click(function () {
+            listPersons(function (persons) {
+                $.each(persons, function (index, person) {
+                    $("#lstPersons").append("<li>" + person.FirstName + " - " + person.LastName + "</li>");
+                });
+            });
+        });
+    });
+
+    function GetPerson(id, callback) {
+        $.ajax({
+            url: "/api/Person",
+            data: { id: id },
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            statusCode: {
+                200: function (person) {
+                    callback(person);
+                },
+                404: function () {
+                    alert("Not found!");
+                }
+            },
+            error:function (msg) {
+                alert("Echte error call" + msg);
+            }
+        });
+    }
+
+    function createPerson(personToCreate, callback) {
+        $.ajax({
+            url: "/api/Person",
+            type: "POST",
+            data: JSON.stringify(personToCreate),
+            contentType: "application/json;charset=utf-8",
+            statusCode: {
+                200: function (person) {
+                    callback(person);
+                }
+            }
+        });
+    }
+    
+    function listPersons(callback) {
+        $.ajax({
+            url: "/api/Person/ListPersons",
+            data: {},
+            type: "GET",
+            contentType: "application/json;charset=utf-8"
+        }).then(function (persons) {
+            callback(persons);
+        });
+    }
+
+
+
+</script>
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <input type="text" id="txtPersonId" />
+            <span id="txtPerson"></span>
+            <input type="button" id="btnGetPerson" value="Get person" />
+        </div>
+        <div class="content-wrapper">
+            <input type="text" id="txtFirstName" />
+            <input type="text" id="txtLastName" />
+            <input type="button" id="btnCreatePerson" value="Create person" />
+            <span id="txtPersonCreateId"></span>
+        </div>
+        <div class="content-wrapper">
+            <input type="button" id="btnAllPerson" value="Get all persons" />
+            <ul id="lstPersons"></ul>
+        </div>
+    </section>
+}

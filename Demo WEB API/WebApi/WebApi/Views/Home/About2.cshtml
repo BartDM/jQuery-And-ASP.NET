@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+	<script type="text/javascript">
+	$(function() {
+		$( "#city" ).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url: "http://ws.geonames.org/searchJSON",
+					dataType: "jsonp",
+					data: {
+						featureClass: "P",
+						style: "full",
+						maxRows: 12,
+						name_startsWith: request.term
+					},
+					success: function( data ) {
+						response( $.map( data.geonames, function( item ) {
+						    return {
+						        label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+						        value: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+						        selectedValue: item.adminName4,
+						        lat:item.lat,
+                                lng:item.lng
+						    };
+						}));
+					}
+				});
+			},
+			minLength: 2,
+			select: function (event, ui) {
+			    $("#txtSelectedCity").val(ui.item.selectedValue + ": latitude="+ui.item.lat +" longitude="+ui.item.lng);
+			}
+		});
+	});
+	</script>
+<div class="content-wrapper">
+<div class="ui-widget">
+	<label for="city">Your city: </label>
+	<input id="city" />
+    Powered by <a href="http://geonames.org">geonames.org</a>
+</div>
+    <input id="txtSelectedCity" type="text" style="width:400px;margin-top:20px"/>
+</div>
+</div>

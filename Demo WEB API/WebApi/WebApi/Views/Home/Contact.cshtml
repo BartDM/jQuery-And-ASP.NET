@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "All books";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        listBooks(function (books) {
+            $.each(books, function (index, book) {
+                book.PrintDate = FormatDate(book.PrintDate);
+                book.Added = FormatDate(book.Added);
+                var row = "<tr><td>" + book.Id + "</td>" + "<td>" + book.Title + "</td>" + "<td>" + book.Author + "</td>" + "<td>" + book.ISBN + "</td>" + "<td>" + book.Pages + "</td>" + "<td>" + book.PrintDate + "</td>" + "<td>" + book.UserName + "</td>" + "<td>" + book.Added + "</td>" + "<tr>";
+                $("table tbody").append(row);
+            });
+        });
+    });
+
+    function listBooks(callback) {
+        $.ajax({
+            url: "/api/book/ListBooks",
+            data: {},
+            type: "GET",
+            contentType: "application/json;charset=utf-8"
+        }).then(function (books) {
+            callback(books);
+        });
+    }
+    
+    function FormatDate(oldDateString) {
+        var date = new Date(eval(oldDateString.slice(1, -1)));
+        var formattedDate = $.datepicker.formatDate('dd/mm/yy', date);
+        return formattedDate;
+    }
+
+</script>
+<div class="content-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Pages</th>
+                <th>PrintDate</th>
+                <th>UserName</th>
+                <th>Added</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

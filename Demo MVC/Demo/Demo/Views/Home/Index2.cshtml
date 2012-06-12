@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Demo.Models.Book>
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Index2</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            BookTitle
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BookTitle)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.BookId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BookId })
+        </td>
+    </tr>
+}
+
+</table>
